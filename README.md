@@ -7,7 +7,7 @@
 ## 1. Clonar o repositório
 
 ```bash
-git clone URL_DO_SEU_REPOSITORIO
+git clone https://github.com/Isa-fee/POAS---Ecommerce.git
 ```
 
 ---
@@ -15,7 +15,7 @@ git clone URL_DO_SEU_REPOSITORIO
 ## 2. Entrar na pasta do projeto
 
 ```bash
-cd nome-do-projeto
+cd POAS---Ecommerce
 ```
 
 ---
@@ -25,7 +25,7 @@ cd nome-do-projeto
 ## Windows
 
 ```bash
-python -m venv venv
+python -m venv env
 ```
 
 ---
@@ -35,13 +35,13 @@ python -m venv venv
 ## Windows
 
 ```bash
-venv\Scripts\activate
+.\env\Scripts\activate
 ```
 
 Após ativar, deverá aparecer algo parecido com:
 
 ```bash
-(venv)
+(env)
 ```
 
 no terminal.
