@@ -1,5 +1,5 @@
 from sqlmodel import Session, select
-from models import Usuario
+from models import Usuario, Papel, Produto
 
 def criar_usuario(session: Session, usuario: Usuario):
     session.add(usuario)
@@ -42,7 +42,6 @@ def deletar_usuario(session: Session, usuario_id: int):
 
 ###########################################################
 
-from models import Papel
 
 def criar_papel(session: Session, papel: Papel):
     session.add(papel)
@@ -70,3 +69,40 @@ def adicionar_papel_usuario(session: Session, usuario_id: int, papel_id: int):
     session.refresh(usuario)
 
     return usuario
+
+#crud de produtos
+
+def criar_produto(session: Session, produto: Produto):
+    session.add(produto)
+    session.commit()
+    session.refresh(produto)
+    return produto
+
+def listar_produtos(session: Session):
+    return session.exec(select(Produto)).all()
+
+def atualizar_produto(session: Session, produto_id: int, dados: dict):
+    produto = session.get(Produto, produto_id)
+
+    if not produto:
+        return None
+
+    for chave, valor in dados.items():
+        setattr(produto, chave, valor)
+
+    session.add(produto)
+    session.commit()
+    session.refresh(produto)
+
+    return produto
+
+def deletar_produto(session: Session, produto_id: int):
+    produto = session.get(Produto, produto_id)
+
+    if not produto:
+        return False
+
+    session.delete(produto)
+    session.commit()
+
+    return True

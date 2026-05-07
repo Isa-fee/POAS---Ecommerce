@@ -4,7 +4,7 @@ from sqlmodel import SQLModel, Session
 from database import engine, get_session
 import models
 import crud
-from models import Usuario, Papel
+from models import Usuario, Papel, Produto
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -48,3 +48,22 @@ def listar_papeis(session: Session = Depends(get_session)):
 @app.post("/usuarios/{usuario_id}/papeis/{papel_id}")
 def adicionar_papel_usuario(usuario_id: int, papel_id: int, session: Session = Depends(get_session)):
     return crud.adicionar_papel_usuario(session, usuario_id, papel_id)
+
+
+#produtos
+
+@app.post("/produtos")
+def criar_produto(produto: Produto, session: Session = Depends(get_session)):
+    return crud.criar_produto(session, produto)
+
+@app.get("/produtos")
+def listar_produtos(session: Session = Depends(get_session)):
+    return crud.listar_produtos(session)
+
+@app.put("/produtos/{produto_id}")
+def atualizar_produto(produto_id: int, dados: dict, session: Session = Depends(get_session)):
+    return crud.atualizar_produto(session, produto_id, dados)
+
+@app.delete("/produtos/{produto_id}")
+def deletar_produto(produto_id: int, session: Session = Depends(get_session)):
+    return crud.deletar_produto(session, produto_id)
