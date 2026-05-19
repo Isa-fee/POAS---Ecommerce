@@ -4,7 +4,7 @@ from sqlmodel import SQLModel, Session
 from database import engine, get_session
 import models
 import crud
-from models import Usuario, Papel, Produto, Categoria, Pedido
+from models import Usuario, Papel, Produto, Categoria, Pedido, Endereco
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -117,3 +117,28 @@ def atualizar_pedido(pedido_id: int, dados: dict, session: Session = Depends(get
 @app.delete("/pedidos/{pedido_id}")
 def deletar_pedido(pedido_id: int, session: Session = Depends(get_session)):
     return crud.deletar_pedido(session, pedido_id)
+
+
+
+
+
+
+
+#endereco
+
+@app.post("/enderecos")
+def criar_endereco(endereco: Endereco, session: Session = Depends(get_session)):
+    return crud.criar_endereco(session, endereco)
+
+
+@app.get("/enderecos")
+def listar_enderecos(session: Session = Depends(get_session)):
+    return crud.listar_enderecos(session)
+
+@app.put("/enderecos/{endereco_id}")
+def atualizar_endereco(endereco_id: int, dados: dict, session: Session = Depends(get_session)):
+    return crud.atualizar_endereco(session, endereco_id, dados)
+
+@app.delete("/enderecos/{endereco_id}")
+def deletar_endereco(endereco_id: int, session: Session = Depends(get_session)):
+    return crud.deletar_endereco(session, endereco_id)

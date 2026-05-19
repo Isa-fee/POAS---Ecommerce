@@ -1,5 +1,5 @@
 from sqlmodel import Session, select
-from models import Usuario, Papel, Produto, Categoria, Pedido
+from models import Usuario, Papel, Produto, Categoria, Pedido, Endereco
 
 def criar_usuario(session: Session, usuario: Usuario):
     session.add(usuario)
@@ -176,6 +176,45 @@ def deletar_pedido(session: Session, pedido_id: int):
         return False
 
     session.delete(pedido)
+    session.commit()
+
+    return True
+
+
+##################################################
+
+def criar_endereco(session: Session, endereco: Endereco):
+    session.add(endereco)
+    session.commit()
+    session.refresh(endereco)
+    return endereco
+
+def listar_enderecos(session: Session):
+    return session.exec(select(Endereco)).all()
+
+
+def atualizar_endereco(session: Session, endereco_id: int, dados: dict):
+    endereco = session.get(Endereco, endereco_id)
+
+    if not endereco:
+        return None
+
+    for chave, valor in dados.items():
+        setattr(endereco, chave, valor)
+
+    session.add(endereco)
+    session.commit()
+    session.refresh(endereco)
+
+    return endereco
+
+def deletar_endereco(session: Session, endereco_id: int):
+    endereco = session.get(Endereco, endereco_id)
+
+    if not endereco:
+        return False
+
+    session.delete(endereco)
     session.commit()
 
     return True
