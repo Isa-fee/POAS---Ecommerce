@@ -1,5 +1,5 @@
 from sqlmodel import Session, select
-from models import Usuario, Papel, Produto
+from models import Usuario, Papel, Produto, Categoria, Pedido
 
 def criar_usuario(session: Session, usuario: Usuario):
     session.add(usuario)
@@ -70,6 +70,8 @@ def adicionar_papel_usuario(session: Session, usuario_id: int, papel_id: int):
 
     return usuario
 
+#################################################################
+
 #crud de produtos
 
 def criar_produto(session: Session, produto: Produto):
@@ -103,6 +105,77 @@ def deletar_produto(session: Session, produto_id: int):
         return False
 
     session.delete(produto)
+    session.commit()
+
+    return True
+
+
+###############################################
+
+def criar_categoria(session: Session, categoria: Categoria):
+    session.add(categoria)
+    session.commit()
+    session.refresh(categoria)
+    return categoria
+
+
+def listar_categorias(session: Session):
+    return session.exec(select(Categoria)).all()
+
+
+#ligacao de categorias com produtos
+
+
+def adicionar_categoria_produto(session: Categoria, categoria_id: int, produto_id: int):
+    categoria = session.get(Categoria, categoria_id)
+    produto = session.get(Produto, produto_id)
+
+    if not categoria or not produto:
+        return None
+
+    produto.categorias.append(categoria)
+
+    session.add(produto)
+    session.commit()
+    session.refresh(produto)
+
+    return produto
+
+
+########################################################
+
+def criar_pedido(session: Session, pedido: Pedido):
+    session.add(pedido)
+    session.commit()
+    session.refresh(pedido)
+    return pedido
+
+def listar_pedidos(session: Session):
+    return session.exec(select(Pedido)).all()
+
+
+def atualizar_pedido(session: Session, pedido_id: int, dados: dict):
+    pedido = session.get(Pedido, pedido_id)
+
+    if not pedido:
+        return None
+
+    for chave, valor in dados.items():
+        setattr(pedido, chave, valor)
+
+    session.add(pedido)
+    session.commit()
+    session.refresh(pedido)
+
+    return pedido
+
+def deletar_pedido(session: Session, pedido_id: int):
+    pedido = session.get(Pedido, pedido_id)
+
+    if not pedido:
+        return False
+
+    session.delete(pedido)
     session.commit()
 
     return True

@@ -1,6 +1,7 @@
 from typing import Optional, List
 from sqlmodel import SQLModel, Field, Relationship
 from datetime import datetime
+from pydantic import EmailStr
 
 
 #tabela que liga usuários e papeis
@@ -36,9 +37,9 @@ class Usuario(SQLModel, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True)
     nome: str
-    email: str = Field(unique=True, index=True)
+    email: EmailStr = Field(unique=True, index=True)
     senha_hash: str
-    criado_em: datetime = Field(default_factory=datetime.utcnow)
+    criado_em: datetime = Field(default_factory=datetime.now)
 
     papeis: List[Papel] = Relationship(
         back_populates="usuarios",
@@ -69,7 +70,7 @@ class Produto(SQLModel, table=True):
     nome: str
     descricao: str
     preco: float
-    criado_em: datetime = Field(default_factory=datetime.utcnow)
+    criado_em: datetime = Field(default_factory=datetime.now)
 
     categorias: List["Categoria"] = Relationship(
         back_populates="produtos",
@@ -87,6 +88,8 @@ class Categoria(SQLModel, table=True):
         link_model=ProdutoCategoria)
 
 
+#pedidos
+
 class Pedido(SQLModel, table=True):
     __tablename__ = "pedidos"
 
@@ -97,7 +100,7 @@ class Pedido(SQLModel, table=True):
     total: float
     status: str
 
-    criado_em: datetime = Field(default_factory=datetime.utcnow)
+    criado_em: datetime = Field(default_factory=datetime.now)
 
 
 class Pagamento(SQLModel, table=True):
@@ -111,7 +114,7 @@ class Pagamento(SQLModel, table=True):
     metodo: str
     status: str
 
-    pago_em: datetime = Field(default_factory=datetime.utcnow)
+    pago_em: datetime = Field(default_factory=datetime.now)
 
 
 class Endereco(SQLModel, table=True):
@@ -137,7 +140,7 @@ class Avaliacao(SQLModel, table=True):
     nota: int
     comentario: str
 
-    criado_em: datetime = Field(default_factory=datetime.utcnow)
+    criado_em: datetime = Field(default_factory=datetime.now)
 
 
 class Estoque(SQLModel, table=True):
@@ -152,7 +155,7 @@ class Estoque(SQLModel, table=True):
 
     quantidade: int
 
-    atualizado_em: datetime = Field(default_factory=datetime.utcnow)
+    atualizado_em: datetime = Field(default_factory=datetime.now)
 
 #tabela para os pedisos e itens
 
